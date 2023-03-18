@@ -31,13 +31,14 @@ HELP = """Добро пожаловать в НикольБанк.
  /reg {имя} {фамилия} {класс} {логин} {пароль} - регистрация в нашем банке
  /login {логин} {пароль} - войти в свой аккаунт
  /unlogin - выйти из аккаунта
+ /profile - показать свой профиль
  /help - помощь
 """
 
 def get_allowed_commands(priv):
     com = []
     if priv >= 1:
-        com += ["reg", "login", "unlogin", "help", "start"]
+        com += ["reg", "login", "unlogin", "help", "start", "profile"]
     if priv >= 2:
         com += []
     return com
