@@ -63,6 +63,7 @@ def RECREATE(conn):
 conn = create_connection(PATH)
 while True:
     com = input(">>> ")
+    line = False
     if com == "INIT":
         INIT(conn)
         continue
@@ -72,6 +73,16 @@ while True:
     elif com == "RECREATE":
         RECREATE(conn)
         continue
+    elif len(com) > 1 and com[0] == "!":
+        line = True
+        com = com[1:]
     res = execute_read_query(conn, com)
     if res != None:
-        print(res)
+        if line:
+            try:
+                for el in res:
+                    print(el)
+            except:
+                pass
+        else:
+            print(res)
