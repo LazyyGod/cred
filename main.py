@@ -136,7 +136,7 @@ async def login(message):
             return 0
         if _login in LOGIN.values():
             await message.answer("Человек с этим аккаунтом уже вошел в систему!")
-        elif _password == el[-2]:
+        elif _password == el[5]:
             await message.answer("Вход успешен!")
             LOGIN[message.chat.id] = _login
         else:
@@ -154,6 +154,28 @@ async def unlogin(message):
 async def userhelp(message):
     await message.answer(HELP)
 
+async def profile(message):
+    global USERS
+    global LOGIN
+    try:
+        res = []
+        #await message.answer("Ваш логин: " + LOGIN[message.chat.id])
+        for i in USERS:
+            if i[4] == LOGIN[message.chat.id]:
+                res = i
+                break
+        msg = f"""Профиль
+Логин: {i[4]}
+Имя: {i[1]}
+Фамилия: {i[2]}
+Класс: {i[3]}
+Долги: {i[6]}
+"""
+        await message.answer(msg)
+
+    except:
+        await message.answer("Вы не зарегистрировны или не вошли в аккаунт!")
+
 async def main():
     global USERS
     INIT(conn)
@@ -165,6 +187,7 @@ async def main():
     dp.register_message_handler(login, commands = ["login"])
     dp.register_message_handler(unlogin, commands = ["unlogin"])
     dp.register_message_handler(userhelp, commands = ["help"])
+    dp.register_message_handler(profile, commands = ["profile"])
     #os.system("python " + os.getcwd() + "/sql_con.py")
     await dp.start_polling(bot)
 try:
