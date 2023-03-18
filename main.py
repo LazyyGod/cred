@@ -34,6 +34,14 @@ HELP = """Добро пожаловать в НикольБанк.
  /help - помощь
 """
 
+def get_allowed_commands(priv):
+    com = []
+    if priv >= 1:
+        com += ["reg", "login", "unlogin", "help", "start"]
+    if priv >= 2:
+        com += []
+    return com
+
 def create_connection(path):
     conn = None
     try:
