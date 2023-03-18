@@ -157,7 +157,7 @@ async def main():
     dp.register_message_handler(login, commands = ["login"])
     dp.register_message_handler(unlogin, commands = ["unlogin"])
     dp.register_message_handler(userhelp, commands = ["help"])
-    os.system("python " + os.getcwd() + "/sql_con.py")
+    #os.system("python " + os.getcwd() + "/sql_con.py")
     await dp.start_polling(bot)
 try:
     asyncio.run(main())

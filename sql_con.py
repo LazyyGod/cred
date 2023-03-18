@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS users (
   class TEXT NOT NULL,
   login TEXT NOT NULL,
   password TEXT NOT NULL,
-  balance INTEGER NOT NULL
+  balance INTEGER NOT NULL,
+  privilege INTEGER
 );
 """
 
