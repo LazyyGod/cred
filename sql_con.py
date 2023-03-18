@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
   login TEXT NOT NULL,
   password TEXT NOT NULL,
   balance INTEGER NOT NULL,
-  privilege INTEGER
+  privilege INTEGER DEFAULT(1)
 );
 """
 
