@@ -16,12 +16,22 @@ CREATE TABLE IF NOT EXISTS users (
   class TEXT NOT NULL,
   login TEXT NOT NULL,
   password TEXT NOT NULL,
-  balance INTEGER NOT NULL
+  balance INTEGER NOT NULL,
+  privilege INTEGER
 );
 """
 
 DROP_DATABASE_QUERY = """
 DROP TABLE users;
+"""
+
+HELP = """Добро пожаловать в НикольБанк.
+Здесь будут вести учет всех кредитов на пятерки по математике.
+Команды:
+ /reg {имя} {фамилия} {класс} {логин} {пароль} - регистрация в нашем банке
+ /login {логин} {пароль} - войти в свой аккаунт
+ /unlogin - выйти из аккаунта
+ /help - помощь
 """
 
 def create_connection(path):
@@ -84,7 +94,7 @@ async def start(message):
 #bot.polling(non_stop = True)
 
 async def register(message):
-    global USERS
+    global USERS, conn
     try:
         _name, _surname, _class, _login, _password = message.get_args().split()
     except ValueError:
@@ -95,7 +105,7 @@ async def register(message):
         USERS = SELECT_USERS(conn)
         print(USERS, _login)
         for el in USERS:
-            if el[-3] == _login:
+            if el[4] == _login:
                 await message.answer("Этот логин уже занят!")
                 return 0
         reg(_name, _surname, _class, _login, _password)
@@ -111,12 +121,14 @@ async def login(message):
 """)
     else:
         for el in USERS:
-            if el[-3] == _login:
+            if el[4] == _login:
                 break
         else:
             await message.answer("Такого пользователя не существует!")
             return 0
-        if _password == el[-2]:
+        if _login in LOGIN.values():
+            await message.answer("Человек с этим аккаунтом уже вошел в систему!")
+        elif _password == el[-2]:
             await message.answer("Вход успешен!")
             LOGIN[message.chat.id] = _login
         else:
@@ -131,6 +143,9 @@ async def unlogin(message):
     except:
         await message.answer("Вы не входили в аккаунт!")
 
+async def userhelp(message):
+    await message.answer(HELP)
+
 async def main():
     global USERS
     INIT(conn)
@@ -141,6 +156,7 @@ async def main():
     dp.register_message_handler(register, commands = ['reg'])
     dp.register_message_handler(login, commands = ["login"])
     dp.register_message_handler(unlogin, commands = ["unlogin"])
+    dp.register_message_handler(userhelp, commands = ["help"])
     os.system("python " + os.getcwd() + "/sql_con.py")
     await dp.start_polling(bot)
 try:
