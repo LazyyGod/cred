@@ -49,9 +49,28 @@ def execute_read_query(conn, query):
     except Error as e:
         print(f"The error '{e}' occurred")
 
+def INIT(conn):
+    execute_query(conn, CREATE_DATABASE_QUERY)
+    
+def DROP_ALL(conn):
+    execute_query(conn, DROP_DATABASE_QUERY)
+
+def RECREATE(conn):
+    DROP_ALL(conn)
+    INIT(conn)
+    
 conn = create_connection(PATH)
 while True:
     com = input(">>> ")
+    if com == "INIT":
+        INIT(conn)
+        continue
+    elif com == "DROP_ALL":
+        DROP_ALL(conn)
+        continue
+    elif com == "RECREATE":
+        RECREATE(conn)
+        continue
     res = execute_read_query(conn, com)
     if res != None:
         print(res)
